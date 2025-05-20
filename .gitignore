@@ -1,0 +1,6 @@
+# Maven target directory /target/ # Eclipse files .project .classpath 
+.settings/ # IntelliJ IDEA files *.iml .idea/ out/ # NetBeans files 
+nbproject/private/ build/ nbbuild/ dist/ nbdist/ .nb-gradle/ # VS Code 
+files .vscode/ # Logs *.log # OS Files .DS_Store Thumbs.db # Others 
+*.class *.jar *.war *.ear # Environment files .env # Temporary files tmp/
+temp/
