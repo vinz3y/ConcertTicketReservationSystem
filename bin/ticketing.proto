@@ -1,0 +1,62 @@
+syntax = "proto3";
+package ticketing;
+
+option java_multiple_files = true;
+
+service TicketService {
+  rpc AddConcert(AddConcertRequest) returns (ConcertResponse);
+  rpc UpdateConcert(UpdateConcertRequest) returns (ConcertResponse);
+  rpc BookTicket(BookRequest) returns (BookingResponse);
+  rpc GetConcerts(Empty) returns (ConcertList);
+}
+
+message AddConcertRequest {
+  string concert_id = 1;
+  string title = 2;
+  repeated SeatTier seat_tiers = 3;
+  int32 after_party_tickets = 4;
+}
+
+message UpdateConcertRequest {
+  string concert_id = 1;
+  repeated SeatTier seat_tiers = 2;
+  int32 after_party_tickets = 3;
+}
+
+message BookRequest {
+  string concert_id = 1;
+  string user_id = 2;
+  string seat_type = 3;
+  int32 quantity = 4;
+  bool wants_after_party = 5;
+}
+
+message ConcertResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message BookingResponse {
+  bool success = 1;
+  string ticket_id = 2;
+  string message = 3;
+}
+
+message SeatTier {
+  string name = 1;
+  int32 quantity = 2;
+  double price = 3;
+}
+
+message Concert {
+  string concert_id = 1;
+  string title = 2;
+  repeated SeatTier tiers = 3;
+  int32 after_party_remaining = 4;
+}
+
+message ConcertList {
+  repeated Concert concerts = 1;
+}
+
+message Empty {}
