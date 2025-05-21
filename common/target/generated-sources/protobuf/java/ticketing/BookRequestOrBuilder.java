@@ -55,4 +55,10 @@ public interface BookRequestOrBuilder extends
    * @return The wantsAfterParty.
    */
   boolean getWantsAfterParty();
+
+  /**
+   * <code>bool is_replication = 6;</code>
+   * @return The isReplication.
+   */
+  boolean getIsReplication();
 }

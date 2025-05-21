@@ -1,4 +1,6 @@
+ticketing/FullState$1.class
 ticketing/BookRequest$Builder.class
+ticketing/Booking.class
 ticketing/BookRequestOrBuilder.class
 ticketing/SeatTier.class
 ticketing/ConcertResponse.class
@@ -6,6 +8,7 @@ ticketing/UpdateConcertRequestOrBuilder.class
 ticketing/Concert.class
 ticketing/UpdateConcertRequest$Builder.class
 ticketing/TicketServiceGrpc$TicketServiceBlockingStub.class
+ticketing/FullState.class
 ticketing/TicketServiceGrpc$TicketServiceBaseDescriptorSupplier.class
 ticketing/TicketServiceGrpc$AsyncService.class
 ticketing/UpdateConcertRequest$1.class
@@ -25,14 +28,19 @@ ticketing/Empty$1.class
 ticketing/BookRequest$1.class
 ticketing/AddConcertRequest.class
 ticketing/SeatTier$1.class
+ticketing/FullState$Builder.class
 ticketing/TicketServiceGrpc$MethodHandlers.class
 ticketing/BookingResponse$1.class
+ticketing/FullStateOrBuilder.class
 ticketing/TicketServiceGrpc$TicketServiceFileDescriptorSupplier.class
 ticketing/TicketServiceGrpc$TicketServiceMethodDescriptorSupplier.class
 ticketing/TicketServiceGrpc$TicketServiceStub.class
+ticketing/BookingOrBuilder.class
 ticketing/BookRequest.class
+ticketing/Booking$1.class
 ticketing/TicketServiceGrpc$TicketServiceFutureStub.class
 ticketing/UpdateConcertRequest.class
+ticketing/Booking$Builder.class
 ticketing/ConcertListOrBuilder.class
 ticketing/TicketServiceGrpc$TicketServiceImplBase.class
 ticketing/SeatTier$Builder.class

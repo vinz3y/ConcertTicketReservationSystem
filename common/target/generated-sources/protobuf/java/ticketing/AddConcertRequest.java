@@ -172,6 +172,17 @@ private static final long serialVersionUID = 0L;
     return afterPartyTickets_;
   }
 
+  public static final int IS_REPLICATION_FIELD_NUMBER = 5;
+  private boolean isReplication_ = false;
+  /**
+   * <code>bool is_replication = 5;</code>
+   * @return The isReplication.
+   */
+  @java.lang.Override
+  public boolean getIsReplication() {
+    return isReplication_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -198,6 +209,9 @@ private static final long serialVersionUID = 0L;
     if (afterPartyTickets_ != 0) {
       output.writeInt32(4, afterPartyTickets_);
     }
+    if (isReplication_ != false) {
+      output.writeBool(5, isReplication_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -220,6 +234,10 @@ private static final long serialVersionUID = 0L;
     if (afterPartyTickets_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(4, afterPartyTickets_);
+    }
+    if (isReplication_ != false) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBoolSize(5, isReplication_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -244,6 +262,8 @@ private static final long serialVersionUID = 0L;
         .equals(other.getSeatTiersList())) return false;
     if (getAfterPartyTickets()
         != other.getAfterPartyTickets()) return false;
+    if (getIsReplication()
+        != other.getIsReplication()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -265,6 +285,9 @@ private static final long serialVersionUID = 0L;
     }
     hash = (37 * hash) + AFTER_PARTY_TICKETS_FIELD_NUMBER;
     hash = (53 * hash) + getAfterPartyTickets();
+    hash = (37 * hash) + IS_REPLICATION_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getIsReplication());
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -406,6 +429,7 @@ private static final long serialVersionUID = 0L;
       }
       bitField0_ = (bitField0_ & ~0x00000004);
       afterPartyTickets_ = 0;
+      isReplication_ = false;
       return this;
     }
 
@@ -460,6 +484,9 @@ private static final long serialVersionUID = 0L;
       }
       if (((from_bitField0_ & 0x00000008) != 0)) {
         result.afterPartyTickets_ = afterPartyTickets_;
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.isReplication_ = isReplication_;
       }
     }
 
@@ -546,6 +573,9 @@ private static final long serialVersionUID = 0L;
       if (other.getAfterPartyTickets() != 0) {
         setAfterPartyTickets(other.getAfterPartyTickets());
       }
+      if (other.getIsReplication() != false) {
+        setIsReplication(other.getIsReplication());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -600,6 +630,11 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000008;
               break;
             } // case 32
+            case 40: {
+              isReplication_ = input.readBool();
+              bitField0_ |= 0x00000010;
+              break;
+            } // case 40
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -1029,6 +1064,38 @@ private static final long serialVersionUID = 0L;
     public Builder clearAfterPartyTickets() {
       bitField0_ = (bitField0_ & ~0x00000008);
       afterPartyTickets_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private boolean isReplication_ ;
+    /**
+     * <code>bool is_replication = 5;</code>
+     * @return The isReplication.
+     */
+    @java.lang.Override
+    public boolean getIsReplication() {
+      return isReplication_;
+    }
+    /**
+     * <code>bool is_replication = 5;</code>
+     * @param value The isReplication to set.
+     * @return This builder for chaining.
+     */
+    public Builder setIsReplication(boolean value) {
+
+      isReplication_ = value;
+      bitField0_ |= 0x00000010;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>bool is_replication = 5;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearIsReplication() {
+      bitField0_ = (bitField0_ & ~0x00000010);
+      isReplication_ = false;
       onChanged();
       return this;
     }

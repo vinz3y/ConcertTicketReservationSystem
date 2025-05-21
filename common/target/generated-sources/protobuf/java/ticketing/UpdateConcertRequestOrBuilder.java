@@ -49,4 +49,10 @@ public interface UpdateConcertRequestOrBuilder extends
    * @return The afterPartyTickets.
    */
   int getAfterPartyTickets();
+
+  /**
+   * <code>bool is_replication = 4;</code>
+   * @return The isReplication.
+   */
+  boolean getIsReplication();
 }

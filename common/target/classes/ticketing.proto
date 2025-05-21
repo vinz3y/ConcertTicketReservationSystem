@@ -8,6 +8,7 @@ service TicketService {
   rpc UpdateConcert(UpdateConcertRequest) returns (ConcertResponse);
   rpc BookTicket(BookRequest) returns (BookingResponse);
   rpc GetConcerts(Empty) returns (ConcertList);
+  rpc SyncState(Empty) returns (FullState);
 }
 
 message AddConcertRequest {
@@ -15,12 +16,14 @@ message AddConcertRequest {
   string title = 2;
   repeated SeatTier seat_tiers = 3;
   int32 after_party_tickets = 4;
+  bool is_replication = 5;
 }
 
 message UpdateConcertRequest {
   string concert_id = 1;
   repeated SeatTier seat_tiers = 2;
   int32 after_party_tickets = 3;
+  bool is_replication = 4;
 }
 
 message BookRequest {
@@ -29,6 +32,7 @@ message BookRequest {
   string seat_type = 3;
   int32 quantity = 4;
   bool wants_after_party = 5;
+  bool is_replication = 6;
 }
 
 message ConcertResponse {
@@ -55,8 +59,22 @@ message Concert {
   int32 after_party_remaining = 4;
 }
 
+message Booking {
+  string booking_id = 1;
+  string user_id = 2;
+  string concert_id = 3;
+  string seat_type = 4;
+  int32 quantity = 5;
+  bool after_party = 6;
+}
+
 message ConcertList {
   repeated Concert concerts = 1;
+}
+
+message FullState {
+  repeated Concert concerts = 1;
+  repeated Booking bookings = 2;
 }
 
 message Empty {}

@@ -2,6 +2,7 @@ package com.concert.server;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.List;
 
 import io.grpc.stub.StreamObserver;
 import ticketing.*; // Import your generated gRPC/model classes
@@ -9,8 +10,16 @@ import ticketing.*; // Import your generated gRPC/model classes
 
 public class TicketServiceImpl extends TicketServiceGrpc.TicketServiceImplBase {
 
-	private final ConcurrentHashMap<String, Concert> concerts = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<String, Concert> concerts;
     private final AtomicInteger ticketIdGenerator = new AtomicInteger(1000);
+    private final ConcurrentHashMap<String, Booking> bookings ;
+    private final List<String> peerAddresses;
+    
+    public TicketServiceImpl(List<String> peerAddresses, ConcurrentHashMap<String, Concert> concerts, ConcurrentHashMap<String, Booking> bookings) {
+        this.peerAddresses = peerAddresses;
+        this.concerts = concerts;
+        this.bookings = bookings;
+    }
     
     @Override
     public void addConcert(AddConcertRequest request, StreamObserver<ConcertResponse> responseObserver) {
@@ -58,7 +67,6 @@ public class TicketServiceImpl extends TicketServiceGrpc.TicketServiceImplBase {
 
     @Override
     public void bookTicket(BookRequest request, StreamObserver<BookingResponse> responseObserver) {
-        // Find concert
         Concert concert = concerts.get(request.getConcertId());
         if (concert == null) {
             responseObserver.onNext(BookingResponse.newBuilder()
@@ -68,16 +76,31 @@ public class TicketServiceImpl extends TicketServiceGrpc.TicketServiceImplBase {
             responseObserver.onCompleted();
             return;
         }
-        synchronized (concert) {
-            String ticketId = "T" + ticketIdGenerator.incrementAndGet();
-            responseObserver.onNext(BookingResponse.newBuilder()
-                .setSuccess(true)
-                .setTicketId(ticketId)
-                .setMessage("Ticket booked!")
-                .build());
-            responseObserver.onCompleted();
-        }
+
+        // Demo: always succeed and generate booking (you may want to add logic for seat/after party count)
+        String bookingId = "B" + System.currentTimeMillis();
+        Booking booking = Booking.newBuilder()
+            .setBookingId(bookingId)
+            .setUserId(request.getUserId())
+            .setConcertId(request.getConcertId())
+            .setSeatType(request.getSeatType())
+            .setQuantity(request.getQuantity())
+            .setAfterParty(request.getWantsAfterParty())
+            .build();
+
+        bookings.put(bookingId, booking);
+
+        // Replication logic for booking (optional, if needed, similar to concert replication)
+        // if (!request.getIsReplication()) { ... replicate to peers ... }
+
+        responseObserver.onNext(BookingResponse.newBuilder()
+            .setSuccess(true)
+            .setTicketId(bookingId)
+            .setMessage("Ticket booked!")
+            .build());
+        responseObserver.onCompleted();
     }
+
 
     @Override
     public void getConcerts(Empty request, StreamObserver<ConcertList> responseObserver) {
@@ -85,5 +108,15 @@ public class TicketServiceImpl extends TicketServiceGrpc.TicketServiceImplBase {
         builder.addAllConcerts(concerts.values());
         responseObserver.onNext(builder.build());
         responseObserver.onCompleted();
+    };
+    
+    @Override
+    public void syncState(ticketing.Empty request, io.grpc.stub.StreamObserver<ticketing.FullState> responseObserver) {
+        FullState.Builder builder = FullState.newBuilder();
+        builder.addAllConcerts(concerts.values());
+        builder.addAllBookings(bookings.values());
+        responseObserver.onNext(builder.build());
+        responseObserver.onCompleted();
     }
+    
 }

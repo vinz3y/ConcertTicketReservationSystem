@@ -61,4 +61,10 @@ public interface AddConcertRequestOrBuilder extends
    * @return The afterPartyTickets.
    */
   int getAfterPartyTickets();
+
+  /**
+   * <code>bool is_replication = 5;</code>
+   * @return The isReplication.
+   */
+  boolean getIsReplication();
 }

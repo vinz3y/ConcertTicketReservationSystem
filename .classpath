@@ -6,6 +6,9 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="common/target/generated-sources/protobuf/grpc-java"/>
+	<classpathentry kind="src" path="common/target/generated-sources/protobuf/java"/>
+	<classpathentry excluding="protobuf/grpc-java/|protobuf/java/" kind="src" path="common/target/generated-sources"/>
 	<classpathentry kind="src" path="common/src/main/proto"/>
 	<classpathentry kind="src" path="server/src/main/java"/>
 	<classpathentry kind="src" path="client/src/main/java"/>

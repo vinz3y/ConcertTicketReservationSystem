@@ -139,6 +139,37 @@ public final class TicketServiceGrpc {
     return getGetConcertsMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<ticketing.Empty,
+      ticketing.FullState> getSyncStateMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "SyncState",
+      requestType = ticketing.Empty.class,
+      responseType = ticketing.FullState.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<ticketing.Empty,
+      ticketing.FullState> getSyncStateMethod() {
+    io.grpc.MethodDescriptor<ticketing.Empty, ticketing.FullState> getSyncStateMethod;
+    if ((getSyncStateMethod = TicketServiceGrpc.getSyncStateMethod) == null) {
+      synchronized (TicketServiceGrpc.class) {
+        if ((getSyncStateMethod = TicketServiceGrpc.getSyncStateMethod) == null) {
+          TicketServiceGrpc.getSyncStateMethod = getSyncStateMethod =
+              io.grpc.MethodDescriptor.<ticketing.Empty, ticketing.FullState>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "SyncState"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  ticketing.Empty.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  ticketing.FullState.getDefaultInstance()))
+              .setSchemaDescriptor(new TicketServiceMethodDescriptorSupplier("SyncState"))
+              .build();
+        }
+      }
+    }
+    return getSyncStateMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -214,6 +245,13 @@ public final class TicketServiceGrpc {
         io.grpc.stub.StreamObserver<ticketing.ConcertList> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetConcertsMethod(), responseObserver);
     }
+
+    /**
+     */
+    default void syncState(ticketing.Empty request,
+        io.grpc.stub.StreamObserver<ticketing.FullState> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getSyncStateMethod(), responseObserver);
+    }
   }
 
   /**
@@ -274,6 +312,14 @@ public final class TicketServiceGrpc {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getGetConcertsMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void syncState(ticketing.Empty request,
+        io.grpc.stub.StreamObserver<ticketing.FullState> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getSyncStateMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -318,6 +364,13 @@ public final class TicketServiceGrpc {
     public ticketing.ConcertList getConcerts(ticketing.Empty request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getGetConcertsMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public ticketing.FullState syncState(ticketing.Empty request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getSyncStateMethod(), getCallOptions(), request);
     }
   }
 
@@ -368,12 +421,21 @@ public final class TicketServiceGrpc {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getGetConcertsMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<ticketing.FullState> syncState(
+        ticketing.Empty request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getSyncStateMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_ADD_CONCERT = 0;
   private static final int METHODID_UPDATE_CONCERT = 1;
   private static final int METHODID_BOOK_TICKET = 2;
   private static final int METHODID_GET_CONCERTS = 3;
+  private static final int METHODID_SYNC_STATE = 4;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -407,6 +469,10 @@ public final class TicketServiceGrpc {
         case METHODID_GET_CONCERTS:
           serviceImpl.getConcerts((ticketing.Empty) request,
               (io.grpc.stub.StreamObserver<ticketing.ConcertList>) responseObserver);
+          break;
+        case METHODID_SYNC_STATE:
+          serviceImpl.syncState((ticketing.Empty) request,
+              (io.grpc.stub.StreamObserver<ticketing.FullState>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -454,6 +520,13 @@ public final class TicketServiceGrpc {
               ticketing.Empty,
               ticketing.ConcertList>(
                 service, METHODID_GET_CONCERTS)))
+        .addMethod(
+          getSyncStateMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              ticketing.Empty,
+              ticketing.FullState>(
+                service, METHODID_SYNC_STATE)))
         .build();
   }
 
@@ -506,6 +579,7 @@ public final class TicketServiceGrpc {
               .addMethod(getUpdateConcertMethod())
               .addMethod(getBookTicketMethod())
               .addMethod(getGetConcertsMethod())
+              .addMethod(getSyncStateMethod())
               .build();
         }
       }

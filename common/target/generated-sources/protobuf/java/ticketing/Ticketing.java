@@ -51,10 +51,20 @@ public final class Ticketing {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_ticketing_Concert_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_ticketing_Booking_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_ticketing_Booking_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
     internal_static_ticketing_ConcertList_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_ticketing_ConcertList_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_ticketing_FullState_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_ticketing_FullState_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
     internal_static_ticketing_Empty_descriptor;
   static final 
@@ -69,33 +79,41 @@ public final class Ticketing {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\017ticketing.proto\022\tticketing\"|\n\021AddConce" +
-      "rtRequest\022\022\n\nconcert_id\030\001 \001(\t\022\r\n\005title\030\002" +
-      " \001(\t\022\'\n\nseat_tiers\030\003 \003(\0132\023.ticketing.Sea" +
-      "tTier\022\033\n\023after_party_tickets\030\004 \001(\005\"p\n\024Up" +
-      "dateConcertRequest\022\022\n\nconcert_id\030\001 \001(\t\022\'" +
-      "\n\nseat_tiers\030\002 \003(\0132\023.ticketing.SeatTier\022" +
-      "\033\n\023after_party_tickets\030\003 \001(\005\"r\n\013BookRequ" +
-      "est\022\022\n\nconcert_id\030\001 \001(\t\022\017\n\007user_id\030\002 \001(\t" +
-      "\022\021\n\tseat_type\030\003 \001(\t\022\020\n\010quantity\030\004 \001(\005\022\031\n" +
-      "\021wants_after_party\030\005 \001(\010\"3\n\017ConcertRespo" +
-      "nse\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"F\n" +
-      "\017BookingResponse\022\017\n\007success\030\001 \001(\010\022\021\n\ttic" +
-      "ket_id\030\002 \001(\t\022\017\n\007message\030\003 \001(\t\"9\n\010SeatTie" +
-      "r\022\014\n\004name\030\001 \001(\t\022\020\n\010quantity\030\002 \001(\005\022\r\n\005pri" +
-      "ce\030\003 \001(\001\"o\n\007Concert\022\022\n\nconcert_id\030\001 \001(\t\022" +
-      "\r\n\005title\030\002 \001(\t\022\"\n\005tiers\030\003 \003(\0132\023.ticketin" +
-      "g.SeatTier\022\035\n\025after_party_remaining\030\004 \001(" +
-      "\005\"3\n\013ConcertList\022$\n\010concerts\030\001 \003(\0132\022.tic" +
-      "keting.Concert\"\007\n\005Empty2\240\002\n\rTicketServic" +
-      "e\022F\n\nAddConcert\022\034.ticketing.AddConcertRe" +
-      "quest\032\032.ticketing.ConcertResponse\022L\n\rUpd" +
-      "ateConcert\022\037.ticketing.UpdateConcertRequ" +
-      "est\032\032.ticketing.ConcertResponse\022@\n\nBookT" +
-      "icket\022\026.ticketing.BookRequest\032\032.ticketin" +
-      "g.BookingResponse\0227\n\013GetConcerts\022\020.ticke" +
-      "ting.Empty\032\026.ticketing.ConcertListB\002P\001b\006" +
-      "proto3"
+      "\n\017ticketing.proto\022\tticketing\"\224\001\n\021AddConc" +
+      "ertRequest\022\022\n\nconcert_id\030\001 \001(\t\022\r\n\005title\030" +
+      "\002 \001(\t\022\'\n\nseat_tiers\030\003 \003(\0132\023.ticketing.Se" +
+      "atTier\022\033\n\023after_party_tickets\030\004 \001(\005\022\026\n\016i" +
+      "s_replication\030\005 \001(\010\"\210\001\n\024UpdateConcertReq" +
+      "uest\022\022\n\nconcert_id\030\001 \001(\t\022\'\n\nseat_tiers\030\002" +
+      " \003(\0132\023.ticketing.SeatTier\022\033\n\023after_party" +
+      "_tickets\030\003 \001(\005\022\026\n\016is_replication\030\004 \001(\010\"\212" +
+      "\001\n\013BookRequest\022\022\n\nconcert_id\030\001 \001(\t\022\017\n\007us" +
+      "er_id\030\002 \001(\t\022\021\n\tseat_type\030\003 \001(\t\022\020\n\010quanti" +
+      "ty\030\004 \001(\005\022\031\n\021wants_after_party\030\005 \001(\010\022\026\n\016i" +
+      "s_replication\030\006 \001(\010\"3\n\017ConcertResponse\022\017" +
+      "\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"F\n\017Book" +
+      "ingResponse\022\017\n\007success\030\001 \001(\010\022\021\n\tticket_i" +
+      "d\030\002 \001(\t\022\017\n\007message\030\003 \001(\t\"9\n\010SeatTier\022\014\n\004" +
+      "name\030\001 \001(\t\022\020\n\010quantity\030\002 \001(\005\022\r\n\005price\030\003 " +
+      "\001(\001\"o\n\007Concert\022\022\n\nconcert_id\030\001 \001(\t\022\r\n\005ti" +
+      "tle\030\002 \001(\t\022\"\n\005tiers\030\003 \003(\0132\023.ticketing.Sea" +
+      "tTier\022\035\n\025after_party_remaining\030\004 \001(\005\"|\n\007" +
+      "Booking\022\022\n\nbooking_id\030\001 \001(\t\022\017\n\007user_id\030\002" +
+      " \001(\t\022\022\n\nconcert_id\030\003 \001(\t\022\021\n\tseat_type\030\004 " +
+      "\001(\t\022\020\n\010quantity\030\005 \001(\005\022\023\n\013after_party\030\006 \001" +
+      "(\010\"3\n\013ConcertList\022$\n\010concerts\030\001 \003(\0132\022.ti" +
+      "cketing.Concert\"W\n\tFullState\022$\n\010concerts" +
+      "\030\001 \003(\0132\022.ticketing.Concert\022$\n\010bookings\030\002" +
+      " \003(\0132\022.ticketing.Booking\"\007\n\005Empty2\325\002\n\rTi" +
+      "cketService\022F\n\nAddConcert\022\034.ticketing.Ad" +
+      "dConcertRequest\032\032.ticketing.ConcertRespo" +
+      "nse\022L\n\rUpdateConcert\022\037.ticketing.UpdateC" +
+      "oncertRequest\032\032.ticketing.ConcertRespons" +
+      "e\022@\n\nBookTicket\022\026.ticketing.BookRequest\032" +
+      "\032.ticketing.BookingResponse\0227\n\013GetConcer" +
+      "ts\022\020.ticketing.Empty\032\026.ticketing.Concert" +
+      "List\0223\n\tSyncState\022\020.ticketing.Empty\032\024.ti" +
+      "cketing.FullStateB\002P\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -106,19 +124,19 @@ public final class Ticketing {
     internal_static_ticketing_AddConcertRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ticketing_AddConcertRequest_descriptor,
-        new java.lang.String[] { "ConcertId", "Title", "SeatTiers", "AfterPartyTickets", });
+        new java.lang.String[] { "ConcertId", "Title", "SeatTiers", "AfterPartyTickets", "IsReplication", });
     internal_static_ticketing_UpdateConcertRequest_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_ticketing_UpdateConcertRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ticketing_UpdateConcertRequest_descriptor,
-        new java.lang.String[] { "ConcertId", "SeatTiers", "AfterPartyTickets", });
+        new java.lang.String[] { "ConcertId", "SeatTiers", "AfterPartyTickets", "IsReplication", });
     internal_static_ticketing_BookRequest_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_ticketing_BookRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ticketing_BookRequest_descriptor,
-        new java.lang.String[] { "ConcertId", "UserId", "SeatType", "Quantity", "WantsAfterParty", });
+        new java.lang.String[] { "ConcertId", "UserId", "SeatType", "Quantity", "WantsAfterParty", "IsReplication", });
     internal_static_ticketing_ConcertResponse_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_ticketing_ConcertResponse_fieldAccessorTable = new
@@ -143,14 +161,26 @@ public final class Ticketing {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ticketing_Concert_descriptor,
         new java.lang.String[] { "ConcertId", "Title", "Tiers", "AfterPartyRemaining", });
-    internal_static_ticketing_ConcertList_descriptor =
+    internal_static_ticketing_Booking_descriptor =
       getDescriptor().getMessageTypes().get(7);
+    internal_static_ticketing_Booking_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_ticketing_Booking_descriptor,
+        new java.lang.String[] { "BookingId", "UserId", "ConcertId", "SeatType", "Quantity", "AfterParty", });
+    internal_static_ticketing_ConcertList_descriptor =
+      getDescriptor().getMessageTypes().get(8);
     internal_static_ticketing_ConcertList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ticketing_ConcertList_descriptor,
         new java.lang.String[] { "Concerts", });
+    internal_static_ticketing_FullState_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_ticketing_FullState_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_ticketing_FullState_descriptor,
+        new java.lang.String[] { "Concerts", "Bookings", });
     internal_static_ticketing_Empty_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(10);
     internal_static_ticketing_Empty_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ticketing_Empty_descriptor,
