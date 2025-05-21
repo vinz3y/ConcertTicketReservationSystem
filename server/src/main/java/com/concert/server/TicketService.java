@@ -24,7 +24,6 @@ public class TicketService {
         ConcurrentHashMap<String, Concert> concerts = new ConcurrentHashMap<>();
         ConcurrentHashMap<String, Booking> bookings = new ConcurrentHashMap<>();
 
-     // Sync state if there are peers
         if (!peerList.isEmpty()) {
             boolean synced = false;
             for (String peer : peerList) {
@@ -41,7 +40,7 @@ public class TicketService {
                     channel.shutdown();
                     System.out.println("State synchronized from peer: " + peer);
                     synced = true;
-                    break; // Success! No need to try other peers
+                    break; 
                 } catch (Exception e) {
                     System.err.println("Could not sync state from peer " + peer + ": " + e.getMessage());
                 }
