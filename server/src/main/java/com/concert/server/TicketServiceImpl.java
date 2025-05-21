@@ -5,6 +5,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.List;
 
 import io.grpc.stub.StreamObserver;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import ticketing.*; // Import your generated gRPC/model classes
 
 
@@ -23,6 +25,11 @@ public class TicketServiceImpl extends TicketServiceGrpc.TicketServiceImplBase {
     
     @Override
     public void addConcert(AddConcertRequest request, StreamObserver<ConcertResponse> responseObserver) {
+    	
+    	if (!request.getIsReplication()) {
+            replicateAddConcertToPeers(request);
+        }
+    	
         // Build a Concert object from the request
         Concert concert = Concert.newBuilder()
                 .setConcertId(request.getConcertId())
@@ -39,6 +46,35 @@ public class TicketServiceImpl extends TicketServiceGrpc.TicketServiceImplBase {
                 .build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();
+    }
+    
+    private void replicateAddConcertToPeers(AddConcertRequest request) {
+        for (String peer : peerAddresses) {
+            try {
+                ManagedChannel channel = ManagedChannelBuilder.forTarget(peer).usePlaintext().build();
+                TicketServiceGrpc.TicketServiceBlockingStub stub = TicketServiceGrpc.newBlockingStub(channel);
+                // Set replication flag to true
+                AddConcertRequest replicated = request.toBuilder().setIsReplication(true).build();
+                stub.addConcert(replicated);
+                channel.shutdown();
+            } catch (Exception e) {
+                System.err.println("Replication to " + peer + " failed: " + e.getMessage());
+            }
+        }
+    }
+    
+    private void replicateBookingToPeers(BookRequest request) {
+        for (String peer : peerAddresses) {
+            try {
+                ManagedChannel channel = ManagedChannelBuilder.forTarget(peer).usePlaintext().build();
+                TicketServiceGrpc.TicketServiceBlockingStub stub = TicketServiceGrpc.newBlockingStub(channel);
+                BookRequest replicated = request.toBuilder().setIsReplication(true).build();
+                stub.bookTicket(replicated);
+                channel.shutdown();
+            } catch (Exception e) {
+                System.err.println("Replication to " + peer + " failed: " + e.getMessage());
+            }
+        }
     }
 
     @Override
@@ -67,38 +103,77 @@ public class TicketServiceImpl extends TicketServiceGrpc.TicketServiceImplBase {
 
     @Override
     public void bookTicket(BookRequest request, StreamObserver<BookingResponse> responseObserver) {
-        Concert concert = concerts.get(request.getConcertId());
-        if (concert == null) {
-            responseObserver.onNext(BookingResponse.newBuilder()
-                .setSuccess(false)
-                .setMessage("Concert not found!")
-                .build());
-            responseObserver.onCompleted();
-            return;
+        
+        if (!request.getIsReplication()) {
+            replicateBookingToPeers(request);
         }
 
-        // Demo: always succeed and generate booking (you may want to add logic for seat/after party count)
-        String bookingId = "B" + System.currentTimeMillis();
-        Booking booking = Booking.newBuilder()
-            .setBookingId(bookingId)
-            .setUserId(request.getUserId())
-            .setConcertId(request.getConcertId())
-            .setSeatType(request.getSeatType())
-            .setQuantity(request.getQuantity())
-            .setAfterParty(request.getWantsAfterParty())
-            .build();
+        synchronized (concerts) {
+            Concert concert = concerts.get(request.getConcertId());
+            if (concert == null) {
+                responseObserver.onNext(BookingResponse.newBuilder()
+                    .setSuccess(false)
+                    .setMessage("Concert not found!")
+                    .build());
+                responseObserver.onCompleted();
+                return;
+            }
 
-        bookings.put(bookingId, booking);
+            // Check seat availability and after-party availability
+            int tierIndex = -1;
+            for (int i = 0; i < concert.getTiersCount(); i++) {
+                if (concert.getTiers(i).getName().equals(request.getSeatType())) {
+                    tierIndex = i;
+                    break;
+                }
+            }
+            if (tierIndex == -1 || concert.getTiers(tierIndex).getQuantity() < request.getQuantity()) {
+                responseObserver.onNext(BookingResponse.newBuilder()
+                    .setSuccess(false)
+                    .setMessage("Not enough seats available!")
+                    .build());
+                responseObserver.onCompleted();
+                return;
+            }
+            if (request.getWantsAfterParty() && concert.getAfterPartyRemaining() < request.getQuantity()) {
+                responseObserver.onNext(BookingResponse.newBuilder()
+                    .setSuccess(false)
+                    .setMessage("Not enough after-party tickets available!")
+                    .build());
+                responseObserver.onCompleted();
+                return;
+            }
 
-        // Replication logic for booking (optional, if needed, similar to concert replication)
-        // if (!request.getIsReplication()) { ... replicate to peers ... }
+            // All checks passed; now update quantities
+            Concert.Builder concertBuilder = concert.toBuilder();
+            SeatTier.Builder tierBuilder = concert.getTiers(tierIndex).toBuilder();
+            tierBuilder.setQuantity(tierBuilder.getQuantity() - request.getQuantity());
+            concertBuilder.setTiers(tierIndex, tierBuilder);
 
-        responseObserver.onNext(BookingResponse.newBuilder()
-            .setSuccess(true)
-            .setTicketId(bookingId)
-            .setMessage("Ticket booked!")
-            .build());
-        responseObserver.onCompleted();
+            if (request.getWantsAfterParty()) {
+                concertBuilder.setAfterPartyRemaining(concert.getAfterPartyRemaining() - request.getQuantity());
+            }
+            Concert updatedConcert = concertBuilder.build();
+            concerts.put(request.getConcertId(), updatedConcert);
+
+            String bookingId = "B" + System.currentTimeMillis();
+            Booking booking = Booking.newBuilder()
+                .setBookingId(bookingId)
+                .setUserId(request.getUserId())
+                .setConcertId(request.getConcertId())
+                .setSeatType(request.getSeatType())
+                .setQuantity(request.getQuantity())
+                .setAfterParty(request.getWantsAfterParty())
+                .build();
+            bookings.put(bookingId, booking);
+
+            responseObserver.onNext(BookingResponse.newBuilder()
+                .setSuccess(true)
+                .setTicketId(bookingId)
+                .setMessage("Ticket booked!")
+                .build());
+            responseObserver.onCompleted();
+        }
     }
 
 
